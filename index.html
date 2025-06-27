@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nazar Yesin | AI Automation Engineer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --deep-space: #0A0A0A;
+            --neon-blue: #00FFFF;
+            --violet: #8A2BE2;
+            --electric-cyan: #00FFE1;
+            --soft-white: #F0F0F0;
+            --muted-gray: #888888;
+            --magenta: #FF00FF;
+        }
+
+        * {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background-color: var(--deep-space);
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 40%);
+            overflow-x: hidden;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+        }
+
+        .glow-border {
+            box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), inset 0 0 5px var(--neon-blue);
+        }
+
+        .glow-violet {
+            box-shadow: 0 0 5px var(--violet), 0 0 10px var(--violet);
+        }
+
+        .glow-magenta {
+            box-shadow: 0 0 10px var(--magenta), 0 0 20px var(--magenta);
+        }
+
+        .glass-card {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 240, 240, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px rgba(0, 255, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .mic-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+
+        .mic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(10, 10, 10, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px rgba(0, 255, 255, 0.5);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mic:hover {
+            box-shadow: 0 0 20px var(--magenta), 0 0 40px rgba(255, 0, 255, 0.5);
+            border-color: var(--magenta);
+        }
+
+        .mic svg {
+            width: 50%;
+            height: 50%;
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+        }
+
+        .pulse {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            animation: pulse 2s infinite;
+            opacity: 0;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .sound-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .sound-wave span {
+            display: block;
+            width: 5px;
+            height: 80px;
+            margin: 0 2px;
+            background: linear-gradient(to bottom, var(--electric-cyan), transparent);
+            border-radius: 50px;
+            animation: wave 1.5s infinite ease-in-out;
+            transform-origin: bottom;
+            opacity: 0;
+        }
+
+        .active .sound-wave span {
+            opacity: 0.7;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: scaleY(0.1);
+            }
+
+            50% {
+                transform: scaleY(1);
+            }
+        }
+
+        .sound-wave span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .sound-wave span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .sound-wave span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .sound-wave span:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .sound-wave span:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .sound-wave span:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .sound-wave span:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .sound-wave span:nth-child(8) {
+            animation-delay: 0.8s;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            display: block;
+            width: 2px;
+            height: 2px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            90% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(20vw);
+                opacity: 0;
+            }
+        }
+
+        .highlight-text {
+            background: linear-gradient(to right, var(--neon-blue), var(--electric-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            background: linear-gradient(90deg, var(--neon-blue), var(--violet), var(--electric-cyan), var(--magenta));
+            background-size: 400%;
+            z-index: -1;
+            animation: glowing 20s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes glowing {
+            0% {
+                background-position: 0 0;
+            }
+
+            50% {
+                background-position: 400% 0;
+            }
+
+            100% {
+                background-position: 0 0;
+            }
+        }
+
+        .animated-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--electric-cyan), transparent);
+            animation: border-flow 3s infinite linear;
+        }
+
+        @keyframes border-flow {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: var(--magenta);
+            transform: translateY(-5px);
+            filter: drop-shadow(0 0 8px var(--magenta));
+        }
+
+        .listening .mic {
+            box-shadow: 0 0 20px var(--magenta), 0 0 40px rgba(255, 0, 255, 0.5);
+            border-color: var(--magenta);
+        }
+
+        .jarvis-response {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        .jarvis-response.show {
+            max-height: 300px;
+        }
+
+        #typewriter {
+            border-right: 2px solid var(--electric-cyan);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--electric-cyan)
+            }
+        }
+
+        .project-card {
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px var(--neon-blue), 0 0 40px rgba(0, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body class="text-[#F0F0F0]">
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <header class="fixed w-full z-50 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="text-[#00FFFF] text-xl md:text-2xl font-bold glow-text">
+                NAZAR<span class="text-[#8A2BE2]">YESIN</span>
+            </div>
+            <nav class="hidden md:block">
+                <ul class="flex space-x-8">
+                    <li><a href="#about" class="text-[#888888] hover:text-[#00FFE1] transition-colors">About</a></li>
+                    <li><a href="#projects" class="text-[#888888] hover:text-[#00FFE1] transition-colors">Projects</a>
+                    </li>
+                    <li><a href="#contact" class="text-[#888888] hover:text-[#00FFE1] transition-colors">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-[#F0F0F0]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-[#0A0A0A]/90 backdrop-blur-md py-4 border-t border-[#F0F0F0]/10">
+            <div class="container mx-auto px-4">
+                <ul class="space-y-4">
+                    <li><a href="#about" class="block text-[#888888] hover:text-[#00FFE1] transition-colors">About</a>
+                    </li>
+                    <li><a href="#projects"
+                            class="block text-[#888888] hover:text-[#00FFE1] transition-colors">Projects</a></li>
+                    <li><a href="#contact"
+                            class="block text-[#888888] hover:text-[#00FFE1] transition-colors">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center pt-16 pb-20 relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mic-container mb-8" id="mic-container">
+                <div class="mic" id="mic">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#00FFFF"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </div>
+                <div class="pulse"></div>
+                <div class="pulse" style="animation-delay: 1s;"></div>
+                <div class="sound-wave">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                <div id="typewriter" class="inline-block">AI Automation Engineer</div>
+            </h1>
+            <p class="text-[#888888] text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+                Ask me anything...
+            </p>
+            <div class="jarvis-response mb-8" id="jarvis-response">
+                <div class="glass-card p-6 max-w-2xl mx-auto rounded-lg border border-[#00FFFF]/30">
+                    <p class="text-[#00FFE1] mb-2">Ai Assistant:</p>
+                    <p class="text-[#F0F0F0]" id="response-text">
+                        Hello, I'm Nazar's AI assistant. How can I help you today?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-8 relative">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-center">
+                    Hi, I'm <span class="text-[#00FFFF] glow-text">Nazar Yesin</span>
+                </h2>
+                <div class="text-center mb-12">
+                    <p class="text-lg text-[#888888]">
+                        <span class="text-[#00FFE1]">AI Automation Engineer</span> | <span class="text-[#8A2BE2]">Vibe
+                            Coder</span>
+                    </p>
+                </div>
+                <div class="glass-card p-8 rounded-2xl">
+                    <p class="text-[#F0F0F0] text-lg mb-6 leading-relaxed">
+                        I'm passionate about creating AI-powered automation solutions that transform ideas into reality.
+                        With expertise in building complex workflows and integrations, I help businesses leverage the
+                        power of artificial intelligence to streamline processes and enhance productivity.
+                    </p>
+                    <p class="text-[#F0F0F0] text-lg mb-6 leading-relaxed">
+                        My approach combines technical expertise with creative problem-solving. I specialize in
+                        developing custom AI tools, chatbots, and automated systems that feel intuitive and almost
+                        magical to use. When I'm not coding, I'm exploring the latest advancements in AI technology and
+                        finding new ways to apply them to real-world challenges.
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center mt-8">
+                        <div class="px-4 py-2 bg-[#0A0A0A] border border-[#00FFFF]/30 rounded-full text-[#00FFFF]">
+                            AI Integration
+                        </div>
+                        <div class="px-4 py-2 bg-[#0A0A0A] border border-[#8A2BE2]/30 rounded-full text-[#8A2BE2]">
+                            Workflow Automation
+                        </div>
+                        <div class="px-4 py-2 bg-[#0A0A0A] border border-[#00FFE1]/30 rounded-full text-[#00FFE1]">
+                            n8n Expert
+                        </div>
+                        <div class="px-4 py-2 bg-[#0A0A0A] border border-[#FF00FF]/30 rounded-full text-[#FF00FF]">
+                            Chatbot Development
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                Projects <span class="text-[#00FFE1]">Built with n8n</span>
+            </h2>
+            <!-- First row with 3 projects -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                <!-- Project 1 -->
+                <a href="project-telegram-bot.html" class="block project-card">
+                    <div class="glass-card rounded-xl overflow-hidden h-full">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 text-[#00FFFF]">AI Telegram Support Bot</h3>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#8A2BE2]/50 rounded-full text-xs text-[#8A2BE2]">
+                                    Telegram Bot
+                                </span>
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#00FFE1]/50 rounded-full text-xs text-[#00FFE1]">
+                                    AI Integration
+                                </span>
+                            </div>
+                            <p class="text-[#F0F0F0] mb-4">
+                                Automated support system that handles customer inquiries on Telegram using GPT and n8n
+                                workflows to provide real-time responses.
+                            </p>
+                            <div class="animated-border pt-4">
+                                <ul class="text-[#888888] space-y-2 text-sm">
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        80% faster replies
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Automated escalation protocols
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Data logging and analytics
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 text-center">
+                                <span class="text-[#FF00FF] text-sm font-semibold">View Project Details →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 -->
+                <div class="glass-card rounded-xl overflow-hidden h-full">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3 text-[#00FFFF]">Data Scraper & Analyzer</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span
+                                class="px-2 py-1 bg-[#0A0A0A] border border-[#8A2BE2]/50 rounded-full text-xs text-[#8A2BE2]">
+                                AI Parser
+                            </span>
+                            <span
+                                class="px-2 py-1 bg-[#0A0A0A] border border-[#00FFE1]/50 rounded-full text-xs text-[#00FFE1]">
+                                Data Processing
+                            </span>
+                        </div>
+                        <p class="text-[#F0F0F0] mb-4">
+                            Intelligent data extraction system that scrapes websites, analyzes content, and delivers
+                            structured insights through customizable dashboards.
+                        </p>
+                        <div class="animated-border pt-4">
+                            <ul class="text-[#888888] space-y-2 text-sm">
+                                <li class="flex items-center">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    Multi-source integration
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    Automated data cleansing
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    Real-time monitoring alerts
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-6 text-center">
+                            <span class="text-[#888888] text-sm">Coming soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <a href="project-ai-content-generator.html" class="block project-card">
+                    <div class="glass-card rounded-xl overflow-hidden h-full">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 text-[#00FFFF]">AI Content Generator</h3>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#8A2BE2]/50 rounded-full text-xs text-[#8A2BE2]">
+                                    Content Creation
+                                </span>
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#00FFE1]/50 rounded-full text-xs text-[#00FFE1]">
+                                    Multi-platform
+                                </span>
+                            </div>
+                            <p class="text-[#F0F0F0] mb-4">
+                                Automated content creation system that generates blog posts, social media content, and
+                                marketing copy using advanced AI models.
+                            </p>
+                            <div class="animated-border pt-4">
+                                <ul class="text-[#888888] space-y-2 text-sm">
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Multi-platform publishing
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Custom tone and style settings
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Content scheduling automation
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 text-center">
+                                <span class="text-[#FF00FF] text-sm font-semibold">View Project Details →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Second row with 2 projects -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Nutrition Bot -->
+                <a href="project-nutrition-bot.html" class="block project-card">
+                    <div class="glass-card rounded-xl overflow-hidden h-full">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 text-[#00FFFF]">Nutrition Bot</h3>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#8A2BE2]/50 rounded-full text-xs text-[#8A2BE2]">
+                                    Health & Fitness
+                                </span>
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#00FFE1]/50 rounded-full text-xs text-[#00FFE1]">
+                                    AI Nutrition
+                                </span>
+                            </div>
+                            <p class="text-[#F0F0F0] mb-4">
+                                Personal nutritionist bot that analyzes your meals, counts calories from photos, and
+                                provides daily dietary advice and insights.
+                            </p>
+                            <div class="animated-border pt-4">
+                                <ul class="text-[#888888] space-y-2 text-sm">
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Photo-based calorie counting
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Daily nutrition analysis
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Personalized dietary advice
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 text-center">
+                                <span class="text-[#FF00FF] text-sm font-semibold">View Project Details →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- AI Speaker -->
+                <a href="project-ai-speaker.html" class="block project-card">
+                    <div class="glass-card rounded-xl overflow-hidden h-full">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 text-[#00FFFF]">AI Speaker</h3>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#8A2BE2]/50 rounded-full text-xs text-[#8A2BE2]">
+                                    Voice AI
+                                </span>
+                                <span
+                                    class="px-2 py-1 bg-[#0A0A0A] border border-[#00FFE1]/50 rounded-full text-xs text-[#00FFE1]">
+                                    Multilingual
+                                </span>
+                            </div>
+                            <p class="text-[#F0F0F0] mb-4">
+                                Interactive voice assistant that communicates as Nazar Yesin, responding in his voice
+                                using ElevenLabs AI in Ukrainian and English.
+                            </p>
+                            <div class="animated-border pt-4">
+                                <ul class="text-[#888888] space-y-2 text-sm">
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Voice & text interaction
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Bilingual communication
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="text-[#00FFFF] mr-2">→</span>
+                                        Conversation logging
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 text-center">
+                                <span class="text-[#FF00FF] text-sm font-semibold">View Project Details →</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="contact" class="py-20 relative">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">
+                Let's <span class="text-[#00FFE1] glow-text">automate</span> your ideas with AI
+            </h2>
+            <p class="text-[#888888] text-lg mb-12 max-w-2xl mx-auto">
+                Transform your business processes with custom AI solutions tailored to your specific needs.
+            </p>
+            <a href="mailto:contact@nazaryesin.com"
+                class="cta-button inline-block bg-[#0A0A0A] text-[#00FFFF] px-8 py-4 rounded-lg font-bold text-lg border border-[#00FFFF] hover:text-[#FF00FF] hover:border-[#FF00FF] transition-colors">
+                Get Started
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-[#F0F0F0]/10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="mailto:contact@nazaryesin.com"
+                        class="text-[#888888] hover:text-[#00FFE1] transition-colors">
+                        contact@nazaryesin.com
+                    </a>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://linkedin.com/" target="_blank" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                    </a>
+                    <a href="https://t.me/" target="_blank" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center mt-8 text-[#888888] text-sm">
+                © 2025 Nazar Yesin. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // элементы
+        const mic = document.getElementById('mic');
+        const micContainer = document.getElementById('mic-container');
+        const jarvisResponse = document.getElementById('jarvis-response');
+        const responseText = document.getElementById('response-text');
+
+        // инициализация SpeechRecognition
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'uk-UA';        // можно динамически менять
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        // клик по микрофону — старт/стоп
+        mic.addEventListener('click', () => {
+            if (!micContainer.classList.contains('listening')) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        });
+
+        // при старте распознавания — включаем анимацию
+        recognition.onstart = () => {
+            micContainer.classList.add('listening', 'active');
+            jarvisResponse.classList.remove('show');
+            responseText.textContent = '';
+        };
+
+        // при окончании — сбрасываем анимацию
+        recognition.onend = () => {
+            micContainer.classList.remove('active', 'listening');
+        };
+
+        // когда получен результат — отправляем на webhook и проигрываем ответ
+        recognition.onresult = async (event) => {
+            const message = event.results[0][0].transcript.trim();
+            const lang = /[A-Za-z]/.test(message) ? 'en-US' : 'uk-UA';
+
+            // показываем placeholder «печати»
+            jarvisResponse.classList.add('show');
+            typeWriterEffect(responseText, '…');
+
+            try {
+                const res = await fetch('https://automationnazar.app.n8n.cloud/webhook-test/webhook-test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: message, lang })
+                });
+                const data = await res.json();
+
+                // выводим текст
+                typeWriterEffect(responseText, data.answer || '…');
+
+                // проигрываем аудио, если есть
+                if (data.audio_url) {
+                    const audio = new Audio(data.audio_url);
+                    audio.crossOrigin = 'anonymous';
+                    await audio.play();
+                } else {
+                    const utterance = new SpeechSynthesisUtterance(data.answer);
+                    utterance.lang = recognition.lang;
+                    speechSynthesis.speak(utterance);
+                }
+            } catch (err) {
+                console.error(err);
+                typeWriterEffect(responseText, 'Помилка отримання відповіді.');
+            }
+        };
+
+        // обработка ошибок распознавания
+        recognition.onerror = (event) => {
+            console.error('Speech error:', event.error);
+            typeWriterEffect(responseText, 'Не вдалося розпізнати мову.');
+            micContainer.classList.remove('active', 'listening');
+        };
+
+        // ваша функция печати
+        function typeWriterEffect(element, text) {
+            let i = 0;
+            element.textContent = '';
+            const speed = 30;
+            (function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i++);
+                    setTimeout(type, speed);
+                }
+            })();
+        }
+
+
+        // Create particles
+        const particles = document.getElementById('particles');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            createParticle();
+        }
+
+        function createParticle() {
+            const particle = document.createElement('span');
+            particle.classList.add('particle');
+
+            // Random position
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+
+            // Random size
+            const size = Math.random() * 2 + 1;
+
+            // Random color
+            const colors = ['#00FFFF', '#8A2BE2', '#00FFE1'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            // Random animation duration
+            const duration = Math.random() * 20 + 10;
+
+            // Set styles
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.backgroundColor = color;
+            particle.style.animationDuration = `${duration}s`;
+
+            // Append to container
+            particles.appendChild(particle);
+
+            // Remove and recreate after animation ends
+            setTimeout(() => {
+                particle.remove();
+                createParticle();
+            }, duration * 1000);
+        }
+
+        // Typewriter animation for hero title
+        const typewriter = document.getElementById('typewriter');
+        const phrases = ["AI Automation Engineer", "Vibe Coder", "n8n Expert", "AI Integrator"];
+        let phraseIndex = 0;
+
+        // Initial animation is handled by CSS
+        // After first phrase, start JS-based animation
+        setTimeout(() => {
+            typewriter.style.animation = 'none';
+            typewriter.style.borderRight = 'none';
+            phraseIndex = 1;
+            typeNextPhrase();
+        }, 3500);
+
+        function typeNextPhrase() {
+            const phrase = phrases[phraseIndex];
+            typewriter.textContent = '';
+            typewriter.style.borderRight = '2px solid #00FFE1';
+
+            let charIndex = 0;
+            const typeInterval = setInterval(() => {
+                if (charIndex < phrase.length) {
+                    typewriter.textContent += phrase.charAt(charIndex);
+                    charIndex++;
+                } else {
+                    clearInterval(typeInterval);
+                    setTimeout(erasePhrase, 2000);
+                }
+            }, 100);
+        }
+
+        function erasePhrase() {
+            let text = typewriter.textContent;
+            const eraseInterval = setInterval(() => {
+                if (text.length > 0) {
+                    text = text.slice(0, -1);
+                    typewriter.textContent = text;
+                } else {
+                    clearInterval(eraseInterval);
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeNextPhrase, 500);
+                }
+            }, 50);
+        }
+    </script>
+</body>
+
+</html>

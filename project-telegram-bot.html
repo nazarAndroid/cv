@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Telegram Support Bot | Nazar Yesin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space: #0A0A0A;
+            --neon-blue: #00FFFF;
+            --violet: #8A2BE2;
+            --electric-cyan: #00FFE1;
+            --soft-white: #F0F0F0;
+            --muted-gray: #888888;
+            --magenta: #FF00FF;
+        }
+
+        * {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background-color: var(--deep-space);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 40%);
+            overflow-x: hidden;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+        }
+
+        .glass-card {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 240, 240, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px rgba(0, 255, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            display: block;
+            width: 2px;
+            height: 2px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20vw);
+                opacity: 0;
+            }
+        }
+
+        .title-animation {
+            display: inline-block;
+            animation: neonPulse 2s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #00FFFF, 0 0 15px #00FFFF;
+            }
+            to {
+                text-shadow: 0 0 2px #fff, 0 0 5px #00FFFF, 0 0 8px #00FFFF;
+            }
+        }
+
+        .kpi-counter {
+            display: inline-block;
+            position: relative;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+
+        .kpi-counter::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            animation: animateBorder 2s linear infinite;
+        }
+
+        @keyframes animateBorder {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .workflow-preview {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workflow-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: glowPulse 3s infinite;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .workflow-preview:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes glowPulse {
+            0% { background-position: -100% -100%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            background: linear-gradient(90deg, var(--neon-blue), var(--violet), var(--electric-cyan), var(--magenta));
+            background-size: 400%;
+            z-index: -1;
+            animation: glowing 20s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes glowing {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        .tech-icon {
+            transition: all 0.3s ease;
+        }
+
+        .tech-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+
+        .animated-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--electric-cyan), transparent);
+            animation: border-flow 3s infinite linear;
+        }
+
+        @keyframes border-flow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            color: var(--magenta);
+            transform: translateY(-5px);
+            filter: drop-shadow(0 0 8px var(--magenta));
+        }
+    </style>
+</head>
+<body class="text-[#F0F0F0]">
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <header class="fixed w-full z-50 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="text-[#00FFFF] text-xl md:text-2xl font-bold glow-text">
+                <a href="index.html">NAZAR<span class="text-[#8A2BE2]">YESIN</span></a>
+            </div>
+            <nav class="hidden md:flex items-center">
+                <a href="index.html" class="mr-8 text-[#888888] hover:text-[#00FFE1] transition-colors">Home</a>
+                <div class="flex space-x-8">
+                    <a href="#solution" class="text-[#888888] hover:text-[#00FFE1] transition-colors">Solution</a>
+                    <a href="#workflow" class="text-[#888888] hover:text-[#00FFE1] transition-colors">Workflow</a>
+                </div>
+            </nav>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-[#F0F0F0]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0A0A0A]/90 backdrop-blur-md py-4 border-t border-[#F0F0F0]/10">
+            <div class="container mx-auto px-4">
+                <ul class="space-y-4">
+                    <li><a href="index.html" class="block text-[#888888] hover:text-[#00FFE1] transition-colors">Home</a></li>
+                    <li><a href="#solution" class="block text-[#888888] hover:text-[#00FFE1] transition-colors">Solution</a></li>
+                    <li><a href="#impact" class="block text-[#888888] hover:text-[#00FFE1] transition-colors">Impact</a></li>
+                    <li><a href="#workflow" class="block text-[#888888] hover:text-[#00FFE1] transition-colors">Workflow</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center pt-8 pb-8 relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                <span class="title-animation text-[#80FFFF]">AI Telegram Support Bot</span>
+            </h1>
+            <p class="text-[#F0F0F0] text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                Automated real-time replies using GPT + n8n workflows
+            </p>
+
+        </div>
+    </section>
+
+    <!-- Technologies Section -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-[#00FFFF] glow-text">
+                Technologies Used
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-4xl mx-auto">
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/d0a776f565ec4e76962d537d771ccf3b" alt="n8n" class="h-16 mb-3 tech-icon rounded-lg">
+                    <span class="text-[#888888] text-sm">n8n</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/8bd57713fede460ca6fe36d89725f1fe.png" alt="Telegram" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Telegram</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="h-16 w-16 mb-3 flex items-center justify-center bg-white rounded-lg p-2">
+                        <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/b982ceeb20a14c87b0083f3f2356b9ba.svg" alt="OpenAI" class="h-12 tech-icon">
+                    </div>
+                    <span class="text-[#888888] text-sm">OpenAI</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/c4b24c551a3e4c0db6fc071da5f02e96.png" alt="Google Calendar" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Calendar</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/710c4b37d0b74d3ba354a4030d1be582.png" alt="Notion" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Notion</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/319af3ad206a4b4a9d1a4b61587ae333.png" alt="Airtable" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Airtable</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/490270940de544739467c4e59418320b.png" alt="Calculator" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Calculator</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/52f76c557fec4b0ba339ff01a8d03f6d.svg" alt="Tavily" class="h-16 mb-3 tech-icon bg-white rounded-lg p-2">
+                    <span class="text-[#888888] text-sm">Tavily</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/64af9ea9a1e8490fa745935ffa16fcdf.png" alt="Gmail" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Gmail</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/ee48374a64d5408886c8a9bc1ee272ac.png" alt="Supabase" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Supabase</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                    The <span class="text-[#00FFE1] glow-text">Solution</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Problem -->
+                    <div class="glass-card p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 text-[#FF00FF]">The Challenge</h3>
+                        <div class="space-y-4 text-[#F0F0F0]">
+                            <p>Manual customer support was becoming a bottleneck:</p>
+                            <div class="animated-border pt-4">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Slow response times affecting customer satisfaction</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Repetitive questions consuming valuable time</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Limited availability outside business hours</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Difficulty tracking and managing conversations</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Solution -->
+                    <div class="glass-card p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 text-[#00FFE1]">The Solution</h3>
+                        <div class="space-y-4 text-[#F0F0F0]">
+                            <p>Intelligent multi-agent system that automates support:</p>
+                            <div class="animated-border pt-4">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>AI-powered routing to specialized agents</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Email automation and calendar management</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Real-time web search for current information</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Automatic task and project management</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Complete conversation logging in Supabase</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Workflow Preview Section -->
+    <section id="workflow" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-[#00FFE1] glow-text">Workflow Architecture</h2>
+            
+            <div class="max-w-6xl mx-auto">
+                <div class="workflow-preview glass-card p-4 rounded-xl overflow-hidden mb-8">
+                    <img src="8gg0tmyw71.png" alt="n8n Workflow Architecture" class="w-full rounded-lg">
+                </div>
+                <p class="text-center text-[#888888] mb-12">
+                    Multi-Agent AI System: Telegram → Route → Specialized Agents → Response + Logging
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Agent Cards -->
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Calendar Agent</h4>
+                        <p class="text-[#888888] text-sm">Handles scheduling, event creation, and availability management through Google Calendar integration</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Email Agent</h4>
+                        <p class="text-[#888888] text-sm">Manages automated email responses and communication through Gmail API</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Calculator Agent</h4>
+                        <p class="text-[#888888] text-sm">Performs mathematical calculations, conversions, and numeric analysis</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Notion Agent</h4>
+                        <p class="text-[#888888] text-sm">Saves business ideas, MVPs, and project outlines with AI-generated insights</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Task Agent</h4>
+                        <p class="text-[#888888] text-sm">Manages actionable tasks and execution items in Airtable for tracking</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Tavily Search</h4>
+                        <p class="text-[#888888] text-sm">Provides real-time web search capabilities for current information and research</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Implementation -->
+    <section class="py-20 bg-[#0A0A0A]/50 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-[#8A2BE2] glow-text">
+                Technical Implementation
+            </h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-[#00FFE1]">AI Routing System</h3>
+                            <ul class="space-y-3 text-[#F0F0F0] text-sm">
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>GPT-4 powered intent classification</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Context-aware conversation memory</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Intelligent agent selection logic</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Voice message transcription support</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-[#00FFE1]">Data Management</h3>
+                            <ul class="space-y-3 text-[#F0F0F0] text-sm">
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Real-time logging to Supabase database</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Session-based conversation tracking</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>User profile and preference storage</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Analytics and performance metrics</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto glass-card p-8 rounded-xl">
+                <h2 class="text-2xl md:text-3xl font-bold mb-8 text-[#00FFE1]">Key Insights</h2>
+                
+                <div class="border-l-4 border-[#8A2BE2] pl-6 py-2 mb-8">
+                    <p class="text-[#F0F0F0] text-lg italic">
+                        "This multi-agent approach revolutionized how we think about AI automation - instead of one bot trying to do everything, specialized agents excel at their specific tasks."
+                    </p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#00FFFF] mb-2">Agent Specialization</h4>
+                        <p class="text-[#888888]">Each agent is optimized for specific tasks, leading to better accuracy and more natural interactions than a single general-purpose bot.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#00FFFF] mb-2">Contextual Memory</h4>
+                        <p class="text-[#888888]">PostgreSQL-based conversation memory ensures continuity across sessions while maintaining user privacy and data security.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#00FFFF] mb-2">Real-time Integration</h4>
+                        <p class="text-[#888888]">Seamless connection with external services enables the bot to perform actual actions, not just provide information.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="py-20 bg-[#0A0A0A]/70 relative">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-[#FF00FF] glow-text">
+                Want to build something like this?
+            </h2>
+            <p class="text-[#F0F0F0] text-lg mb-12 max-w-2xl mx-auto">
+                I can help you create custom AI automation solutions that transform your business processes and enhance customer experience.
+            </p>
+            <a href="mailto:contact@nazaryesin.com" class="cta-button inline-block bg-[#0A0A0A] text-[#FF00FF] px-8 py-4 rounded-lg font-bold text-lg border border-[#FF00FF] hover:text-white transition-colors">
+                Let's Talk
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-[#F0F0F0]/10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="index.html" class="text-[#00FFFF] hover:text-[#00FFE1] transition-colors font-bold">
+                        ← Back to Portfolio
+                    </a>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="mailto:contact@nazaryesin.com" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/" target="_blank" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="https://t.me/" target="_blank" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center mt-8 text-[#888888] text-sm">
+                © 2025 Nazar Yesin. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Create particles
+        const particles = document.getElementById('particles');
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+            createParticle();
+        }
+        
+        function createParticle() {
+            const particle = document.createElement('span');
+            particle.classList.add('particle');
+            
+            // Random position
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            
+            // Random size
+            const size = Math.random() * 2 + 1;
+            
+            // Random color
+            const colors = ['#00FFFF', '#8A2BE2', '#00FFE1'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Random animation duration
+            const duration = Math.random() * 20 + 10;
+            
+            // Set styles
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.backgroundColor = color;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Append to container
+            particles.appendChild(particle);
+            
+            // Remove and recreate after animation ends
+            setTimeout(() => {
+                particle.remove();
+                createParticle();
+            }, duration * 1000);
+        }
+
+        // Animate counters
+        const counters = document.querySelectorAll('.kpi-counter');
+        
+        function animateCounters() {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / 100;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(animateCounters, 20);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+        
+        // Intersection Observer for counters
+        const observerOptions = {
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Removed impact section observer
+    </script>
+</body>
+</html>

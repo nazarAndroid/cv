@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Bot | Nazar Yesin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space: #0A0A0A;
+            --neon-blue: #00FFFF;
+            --violet: #8A2BE2;
+            --electric-cyan: #00FFE1;
+            --soft-white: #F0F0F0;
+            --muted-gray: #888888;
+            --magenta: #FF00FF;
+        }
+
+        * {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background-color: var(--deep-space);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 40%);
+            overflow-x: hidden;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+        }
+
+        .glass-card {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 240, 240, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px rgba(0, 255, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            display: block;
+            width: 2px;
+            height: 2px;
+            background-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20vw);
+                opacity: 0;
+            }
+        }
+
+        .title-animation {
+            display: inline-block;
+            animation: neonPulse 2s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #00FFFF, 0 0 15px #00FFFF;
+            }
+            to {
+                text-shadow: 0 0 2px #fff, 0 0 5px #00FFFF, 0 0 8px #00FFFF;
+            }
+        }
+
+        .workflow-preview {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .workflow-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: glowPulse 3s infinite;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .workflow-preview:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes glowPulse {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.4), transparent);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 15px var(--magenta), 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+
+        .tech-icon {
+            filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.5));
+            transition: all 0.3s ease;
+        }
+
+        .tech-icon:hover {
+            transform: translateY(-5px);
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8));
+        }
+
+        .animated-border {
+            position: relative;
+            padding-top: 20px;
+            overflow: hidden;
+        }
+
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--electric-cyan), transparent);
+            animation: border-flow 3s infinite linear;
+        }
+
+        @keyframes border-flow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            color: var(--magenta);
+            transform: translateY(-5px);
+            filter: drop-shadow(0 0 8px var(--magenta));
+        }
+    </style>
+</head>
+<body class="text-[#F0F0F0]">
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <header class="fixed w-full z-50 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="text-[#00FFFF] text-xl md:text-2xl font-bold glow-text">
+                <a href="index.html">NAZAR<span class="text-[#8A2BE2]">YESIN</span></a>
+            </div>
+            <nav class="hidden md:flex items-center">
+                <a href="index.html" class="mr-8 text-[#888888] hover:text-[#00FFE1] transition-colors">Home</a>
+                <div class="flex space-x-8">
+                    <a href="#solution" class="text-[#888888] hover:text-[#00FFE1] transition-colors">Solution</a>
+                    <a href="#workflow" class="text-[#888888] hover:text-[#00FFE1] transition-colors">Workflow</a>
+                </div>
+            </nav>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-[#F0F0F0]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden bg-[#0A0A0A] py-4 hidden">
+            <div class="container mx-auto px-4">
+                <a href="index.html" class="block py-2 text-[#888888] hover:text-[#00FFE1] transition-colors">Home</a>
+                <a href="#solution" class="block py-2 text-[#888888] hover:text-[#00FFE1] transition-colors">Solution</a>
+                <a href="#workflow" class="block py-2 text-[#888888] hover:text-[#00FFE1] transition-colors">Workflow</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col items-center justify-center pt-8 pb-8 relative overflow-hidden">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                <span class="title-animation text-[#80FFFF]">Nutrition Bot</span>
+            </h1>
+            <p class="text-[#F0F0F0] text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                Your personal nutritionist in your phone - AI-powered meal tracking and dietary guidance
+            </p>
+        </div>
+    </section>
+
+    <!-- Technologies Section -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-[#00FFFF] glow-text">
+                Technologies Used
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-4xl mx-auto">
+                <div class="flex flex-col items-center">
+                    <div class="h-16 w-16 mb-3 flex items-center justify-center bg-orange-500 rounded-lg p-2">
+                        <span class="text-white font-bold text-lg">n8n</span>
+                    </div>
+                    <span class="text-[#888888] text-sm">n8n</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/8bd57713fede460ca6fe36d89725f1fe.png" alt="Telegram" class="h-16 mb-3 tech-icon">
+                    <span class="text-[#888888] text-sm">Telegram</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="h-16 w-16 mb-3 flex items-center justify-center bg-blue-600 rounded-lg p-2">
+                        <span class="text-white font-bold text-sm">PY</span>
+                    </div>
+                    <span class="text-[#888888] text-sm">Python</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="h-16 w-16 mb-3 flex items-center justify-center bg-green-500 rounded-lg p-2">
+                        <span class="text-white font-bold text-sm">SB</span>
+                    </div>
+                    <span class="text-[#888888] text-sm">Supabase</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="h-16 w-16 mb-3 flex items-center justify-center bg-white rounded-lg p-2">
+                        <img src="https://public.youware.com/users-website-assets/prod/47b74ca0-0b64-40f2-a811-bf3821c1aee1/b982ceeb20a14c87b0083f3f2356b9ba.svg" alt="OpenAI" class="h-12 tech-icon">
+                    </div>
+                    <span class="text-[#888888] text-sm">OpenAI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center">
+                    The <span class="text-[#00FFE1] glow-text">Solution</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Problem -->
+                    <div class="glass-card p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 text-[#FF00FF]">The Challenge</h3>
+                        <div class="space-y-4 text-[#F0F0F0]">
+                            <p>Tracking nutrition and maintaining healthy eating habits was difficult:</p>
+                            <div class="animated-border pt-4">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Manual calorie counting is time-consuming</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Difficulty identifying calories in prepared meals</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>Lack of personalized dietary guidance</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#FF00FF] mr-3 font-bold">×</span>
+                                        <span>No convenient way to track daily nutrition</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Solution -->
+                    <div class="glass-card p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 text-[#00FFE1]">The Solution</h3>
+                        <div class="space-y-4 text-[#F0F0F0]">
+                            <p>An intelligent nutrition bot that provides:</p>
+                            <div class="animated-border pt-4">
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Photo-based calorie analysis using AI vision</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Text-based meal logging with AI parsing</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Daily nutrition summaries and insights</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Personalized dietary recommendations</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-[#00FFE1] mr-3 font-bold">✓</span>
+                                        <span>Automated evening nutrition reports</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Preview Section -->
+    <section id="workflow" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-[#00FFE1] glow-text">Workflow Architecture</h2>
+            
+            <div class="max-w-6xl mx-auto space-y-8">
+                <!-- Workflow 1: Daily Notifications -->
+                <div class="workflow-preview glass-card p-4 rounded-xl overflow-hidden">
+                    <img src="p24mvp0syx.png" alt="Daily Nutrition Notifications Workflow" class="w-full rounded-lg">
+                    <p class="text-center text-[#888888] mt-4">
+                        Daily Notifications: Automated reminder system at 21:00 Kyiv time
+                    </p>
+                </div>
+                
+                <!-- Workflow 2: Photo Analysis -->
+                <div class="workflow-preview glass-card p-4 rounded-xl overflow-hidden">
+                    <img src="95wag577yu.png" alt="Photo Analysis Workflow" class="w-full rounded-lg">
+                    <p class="text-center text-[#888888] mt-4">
+                        Photo Analysis: AI vision processes food images and calculates calories
+                    </p>
+                </div>
+                
+                <!-- Workflow 3: User Profile & Conversation -->
+                <div class="workflow-preview glass-card p-4 rounded-xl overflow-hidden">
+                    <img src="8zras1h7b3.png" alt="User Profile and Conversation Workflow" class="w-full rounded-lg">
+                    <p class="text-center text-[#888888] mt-4">
+                        User Management: Profile creation, manual input, and nutritionist conversations
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                    <!-- Feature Cards -->
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Photo Recognition</h4>
+                        <p class="text-[#888888] text-sm">Advanced AI vision analyzes food photos to identify dishes and calculate accurate calorie counts automatically</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Smart Text Parsing</h4>
+                        <p class="text-[#888888] text-sm">Natural language processing extracts nutritional information from user text inputs about meals</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Daily Reports</h4>
+                        <p class="text-[#888888] text-sm">Automated evening summaries provide insights into daily nutrition and personalized recommendations</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">User Profiles</h4>
+                        <p class="text-[#888888] text-sm">Personalized profiles store dietary preferences, health goals, and meal history for tailored advice</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Nutritionist Chat</h4>
+                        <p class="text-[#888888] text-sm">AI-powered conversations provide expert nutritional guidance and answer dietary questions</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="text-lg font-bold mb-3 text-[#00FFFF]">Data Persistence</h4>
+                        <p class="text-[#888888] text-sm">Secure storage of all meal data, user preferences, and nutritional history for long-term tracking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Implementation -->
+    <section class="py-20 bg-[#0A0A0A]/50 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-[#8A2BE2] glow-text">
+                Technical Implementation
+            </h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-[#00FFE1]">AI Vision & Analysis</h3>
+                            <ul class="space-y-3 text-[#F0F0F0] text-sm">
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>OpenAI Vision API for food recognition</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Calorie calculation algorithms</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Natural language meal parsing</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Nutritional advice generation</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-[#00FFE1]">Data & Automation</h3>
+                            <ul class="space-y-3 text-[#F0F0F0] text-sm">
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Supabase database for user profiles</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>n8n workflow automation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Python data processing scripts</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-[#00FFFF] mr-2">→</span>
+                                    <span>Telegram bot integration</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto glass-card p-8 rounded-xl">
+                <h2 class="text-2xl md:text-3xl font-bold mb-8 text-[#00FFE1]">Key Insights</h2>
+                
+                <div class="border-l-4 border-[#8A2BE2] pl-6 py-2 mb-8">
+                    <p class="text-[#F0F0F0] text-lg italic">
+                        "By combining AI vision with conversational interfaces, users can effortlessly track their nutrition while receiving personalized guidance from their pocket nutritionist."
+                    </p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#00FFFF] mb-2">Visual Recognition Accuracy</h4>
+                        <p class="text-[#888888]">The AI vision system can identify complex dishes and portion sizes with high accuracy, making calorie tracking as simple as taking a photo.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#00FFFF] mb-2">Behavioral Change</h4>
+                        <p class="text-[#888888]">Daily automated reports and personalized advice help users develop healthier eating habits through consistent feedback and guidance.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-[#00FFFF] mb-2">Convenience Factor</h4>
+                        <p class="text-[#888888]">Integration with Telegram means users can access their nutrition assistant through a familiar messaging interface without installing additional apps.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="py-20 bg-[#0A0A0A]/70 relative">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-[#FF00FF] glow-text">
+                Want to build something like this?
+            </h2>
+            <p class="text-[#F0F0F0] text-lg mb-12 max-w-2xl mx-auto">
+                I can help you create custom AI health solutions that transform how people interact with their wellness goals and dietary habits.
+            </p>
+            <a href="mailto:contact@nazaryesin.com" class="cta-button inline-block bg-[#0A0A0A] text-[#FF00FF] px-8 py-4 rounded-lg font-bold text-lg border border-[#FF00FF] hover:text-white transition-colors">
+                Let's Talk
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-[#F0F0F0]/10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="index.html" class="text-[#00FFFF] hover:text-[#00FFE1] transition-colors font-bold">
+                        ← Back to Portfolio
+                    </a>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="mailto:contact@nazaryesin.com" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/" target="_blank" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="https://t.me/" target="_blank" class="social-icon text-[#F0F0F0]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center mt-8 text-[#888888] text-sm">
+                © 2025 Nazar Yesin. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Create particles
+        const particles = document.getElementById('particles');
+        const particleCount = 50;
+        
+        for (let i = 0; i < particleCount; i++) {
+            createParticle();
+        }
+        
+        function createParticle() {
+            const particle = document.createElement('span');
+            particle.classList.add('particle');
+            
+            // Random position
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            
+            // Random size
+            const size = Math.random() * 2 + 1;
+            
+            // Random color
+            const colors = ['#00FFFF', '#8A2BE2', '#00FFE1'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Random animation duration
+            const duration = Math.random() * 20 + 10;
+            
+            // Set styles
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.backgroundColor = color;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // Append to container
+            particles.appendChild(particle);
+            
+            // Remove and recreate after animation ends
+            setTimeout(() => {
+                particle.remove();
+                createParticle();
+            }, duration * 1000);
+        }
+
+    </script>
+</body>
+</html>

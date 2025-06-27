@@ -813,19 +813,17 @@
             });
         });
 
-        // элементы
+        // elements
         const mic = document.getElementById('mic');
         const micContainer = document.getElementById('mic-container');
         const jarvisResponse = document.getElementById('jarvis-response');
         const responseText = document.getElementById('response-text');
 
-        // инициализация SpeechRecognition
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'uk-UA';        // можно динамически менять
+        recognition.lang = 'uk-UA';        
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
 
-        // клик по микрофону — старт/стоп
         mic.addEventListener('click', () => {
             if (!micContainer.classList.contains('listening')) {
                 recognition.start();
@@ -834,39 +832,33 @@
             }
         });
 
-        // при старте распознавания — включаем анимацию
         recognition.onstart = () => {
             micContainer.classList.add('listening', 'active');
             jarvisResponse.classList.remove('show');
             responseText.textContent = '';
         };
 
-        // при окончании — сбрасываем анимацию
         recognition.onend = () => {
             micContainer.classList.remove('active', 'listening');
         };
 
-        // когда получен результат — отправляем на webhook и проигрываем ответ
         recognition.onresult = async (event) => {
             const message = event.results[0][0].transcript.trim();
             const lang = /[A-Za-z]/.test(message) ? 'en-US' : 'uk-UA';
 
-            // показываем placeholder «печати»
             jarvisResponse.classList.add('show');
             typeWriterEffect(responseText, '…');
 
             try {
-                const res = await fetch('https://automationnazar.app.n8n.cloud/webhook-test/webhook-test', {
+                const res = await fetch('https://automationnazar.app.n8n.cloud/webhook/webhook-test', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ question: message, lang })
                 });
                 const data = await res.json();
 
-                // выводим текст
                 typeWriterEffect(responseText, data.answer || '…');
 
-                // проигрываем аудио, если есть
                 if (data.audio_url) {
                     const audio = new Audio(data.audio_url);
                     audio.crossOrigin = 'anonymous';
@@ -882,14 +874,12 @@
             }
         };
 
-        // обработка ошибок распознавания
         recognition.onerror = (event) => {
             console.error('Speech error:', event.error);
             typeWriterEffect(responseText, 'Не вдалося розпізнати мову.');
             micContainer.classList.remove('active', 'listening');
         };
 
-        // ваша функция печати
         function typeWriterEffect(element, text) {
             let i = 0;
             element.textContent = '';
@@ -903,7 +893,6 @@
         }
 
 
-        // Create particles
         const particles = document.getElementById('particles');
         const particleCount = 50;
 

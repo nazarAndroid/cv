@@ -742,7 +742,7 @@
             <p class="text-[#888888] text-lg mb-12 max-w-2xl mx-auto">
                 Transform your business processes with custom AI solutions tailored to your specific needs.
             </p>
-            <a href="mailto:contact@nazaryesin.com"
+            <a href="mailto:nazaryesin@gmail.com"
                 class="cta-button inline-block bg-[#0A0A0A] text-[#00FFFF] px-8 py-4 rounded-lg font-bold text-lg border border-[#00FFFF] hover:text-[#FF00FF] hover:border-[#FF00FF] transition-colors">
                 Get Started
             </a>
@@ -754,20 +754,20 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-6 md:mb-0">
-                    <a href="mailto:contact@nazaryesin.com"
-                        class="text-[#888888] hover:text-[#00FFE1] transition-colors">
+                    <a href="mailto:nazaryesin@gmail.com" class="text-[#888888] hover:text-[#00FFE1] transition-colors">
                         contact@nazaryesin.com
                     </a>
                 </div>
                 <div class="flex space-x-6">
-                    <a href="https://linkedin.com/" target="_blank" class="social-icon text-[#F0F0F0]">
+                    <a href="https://www.linkedin.com/in/nazar-y-abb7381b9/" target="_blank"
+                        class="social-icon text-[#F0F0F0]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="currentColor">
                             <path
                                 d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                         </svg>
                     </a>
-                    <a href="https://t.me/" target="_blank" class="social-icon text-[#F0F0F0]">
+                    <a href="https://t.me/nazar_goo" target="_blank" class="social-icon text-[#F0F0F0]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="currentColor">
                             <path
@@ -813,72 +813,95 @@
             });
         });
 
-        // elements
+
+        // Elements
         const mic = document.getElementById('mic');
         const micContainer = document.getElementById('mic-container');
         const jarvisResponse = document.getElementById('jarvis-response');
         const responseText = document.getElementById('response-text');
 
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'uk-UA';        
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
+        let mediaRecorder;
+        let isRecording = false;
+        let audioChunks = [];
 
-        mic.addEventListener('click', () => {
-            if (!micContainer.classList.contains('listening')) {
-                recognition.start();
+        mic.addEventListener('click', async () => {
+            if (!isRecording) {
+                startMediaRecorder();
             } else {
-                recognition.stop();
+                stopMediaRecorder();
             }
         });
 
-        recognition.onstart = () => {
-            micContainer.classList.add('listening', 'active');
-            jarvisResponse.classList.remove('show');
-            responseText.textContent = '';
-        };
-
-        recognition.onend = () => {
-            micContainer.classList.remove('active', 'listening');
-        };
-
-        recognition.onresult = async (event) => {
-            const message = event.results[0][0].transcript.trim();
-            const lang = /[A-Za-z]/.test(message) ? 'en-US' : 'uk-UA';
-
-            jarvisResponse.classList.add('show');
-            typeWriterEffect(responseText, '…');
-
+        async function startMediaRecorder() {
             try {
-                const res = await fetch('https://automationnazar.app.n8n.cloud/webhook/webhook-test', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: message, lang })
-                });
-                const data = await res.json();
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                isRecording = true;
 
-                typeWriterEffect(responseText, data.answer || '…');
+                micContainer.classList.add('active', 'listening');
+                jarvisResponse.classList.remove('show');
+                responseText.textContent = '';
 
-                if (data.audio_url) {
-                    const audio = new Audio(data.audio_url);
-                    audio.crossOrigin = 'anonymous';
-                    await audio.play();
-                } else {
-                    const utterance = new SpeechSynthesisUtterance(data.answer);
-                    utterance.lang = recognition.lang;
-                    speechSynthesis.speak(utterance);
-                }
+                mediaRecorder.ondataavailable = (e) => {
+                    audioChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const formData = new FormData();
+                    formData.append('audio', blob, 'voice.webm');
+
+                    jarvisResponse.classList.add('show');
+                    typeWriterEffect(responseText, '…');
+
+                    try {
+                        const res = await fetch('https://automationnazar.app.n8n.cloud/webhook-test/webhook-test', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await res.json();
+                        typeWriterEffect(responseText, data.answer || '…');
+
+                        if (data.audio_url) {
+                            const audio = new Audio(data.audio_url);
+                            audio.crossOrigin = 'anonymous';
+                            await audio.play();
+                        } else if (data.answer) {
+                            const utterance = new SpeechSynthesisUtterance(data.answer);
+                            utterance.lang = 'uk-UA';
+                            speechSynthesis.speak(utterance);
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        typeWriterEffect(responseText, 'Помилка отримання відповіді.');
+                    }
+
+                    micContainer.classList.remove('active', 'listening');
+                    isRecording = false;
+                };
+
+                mediaRecorder.start();
+
+                // Автоматично зупинити через 5 секунд
+                setTimeout(() => {
+                    if (mediaRecorder.state !== 'inactive') {
+                        mediaRecorder.stop();
+                    }
+                }, 5000);
             } catch (err) {
-                console.error(err);
-                typeWriterEffect(responseText, 'Помилка отримання відповіді.');
+                console.error('MediaRecorder error:', err);
+                typeWriterEffect(responseText, 'Не вдалося отримати доступ до мікрофону.');
+                micContainer.classList.remove('active', 'listening');
             }
-        };
+        }
 
-        recognition.onerror = (event) => {
-            console.error('Speech error:', event.error);
-            typeWriterEffect(responseText, 'Не вдалося розпізнати мову.');
-            micContainer.classList.remove('active', 'listening');
-        };
+        function stopMediaRecorder() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+        }
 
         function typeWriterEffect(element, text) {
             let i = 0;
@@ -891,6 +914,7 @@
                 }
             })();
         }
+
 
 
         const particles = document.getElementById('particles');
